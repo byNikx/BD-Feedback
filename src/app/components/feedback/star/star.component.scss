@@ -1,0 +1,55 @@
+@mixin ratingSize($size: 24px){
+  height: $size;
+  width: $size;
+  font-size: $size;
+}
+
+:host{
+
+  &.small{
+  	mat-icon{
+      @include ratingSize(18px);  		
+  	}
+  }
+
+  &.medium{
+  	mat-icon{
+      @include ratingSize(24px);  		
+  	}
+  }
+
+  &.large{
+  	mat-icon{
+      @include ratingSize(36px);  		
+  	}
+  }
+
+  &.xl{
+  	mat-icon{
+      @include ratingSize(48px);  		
+  	}
+  }
+
+  .rating{
+	
+
+  	&:after{
+	  content: 'star_border'  		
+  	}
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  &.highlight{
+
+  	.rating{
+      color: #ffa834;
+
+      &:after{
+      	content: 'star';
+      }
+  	}
+  }
+
+}

@@ -1,0 +1,19 @@
+<section style="position: absolute; top: 0; bottom: 0; right: 0; left: 0;" fxLayout="row" fxLayoutAlign="center center">  
+  <section style="width: 800px;">
+    <mat-card>
+      <mat-card-content fxLayout="column" fxLayoutGap="2rem" fxLayoutAlign="center center">
+        <bd-feedback 
+          [max]="count" 
+          [size]="size" 
+          (onSelect)="saveRating($event)"></bd-feedback>
+          <mat-divider></mat-divider>
+          <section>
+            <mat-radio-group [(ngModel)]="size">
+            <mat-radio-button *ngFor="let size of ['small', 'medium', 'large', 'xl']" [value]="size">{{size}}</mat-radio-button>
+          </mat-radio-group>
+          </section>
+          <input type="number" [(ngModel)]="count">{{count}}
+      </mat-card-content>
+    </mat-card>
+  </section>
+</section> 
