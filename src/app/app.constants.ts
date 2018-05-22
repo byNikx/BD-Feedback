@@ -7,9 +7,22 @@ enum RATING_SIZE {
   XL = 'xl'
 }
 
-export const APP_CONSTANT = new InjectionToken('APP_CONSTANTS');
+enum FLEX_LAYOUT_ALIGN {
+  NONE = 'none',
+  START = 'start',
+  END = 'end',
+  CENTER = 'center',
+  STRETCH = 'stretch',
+  BOTTOM = 'bottom',
+  SPACE_AROUND = 'space-around',
+  SPACE_BETWEEN = 'space-between',
+  SPACE_EVENLY = 'space-evenly',
+}
+
+export const APP_CONSTANT = new InjectionToken('APP_CONSTANT');
 export const CONSTANT_VALUES = {
-	RATING_SIZE
+	RATING_SIZE,
+	FLEX_LAYOUT_ALIGN
 };
 
 export const ConstantsProvider = {

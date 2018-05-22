@@ -29,7 +29,7 @@ export class StarComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private element: ElementRef,
-    @Inject( APP_CONSTANT ) private APP_CONSTANT: any) { }
+    @Inject( APP_CONSTANT ) public APP_CONSTANT: any) { }
 
   ngOnInit() {
   }

@@ -20,6 +20,16 @@ import {MAT_MODULES} from './material/material.module';
 import { AppComponent } from './app.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { StarComponent } from './components/feedback/star/star.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { HostDirective } from './components/dialog/host.directive';
+import { TestComponent } from './components/test/test.component';
+import { OverlayComponent } from './components/overlay/overlay.component';
+import { TestService } from './services/test.service';
+import { UserService } from './services/user.service';
+import { SurveyContainerDirective } from './components/feedback/survey-container.directive';
+import { GoodComponent } from './components/survey/good/good.component';
+import { BadComponent } from './components/survey/bad/bad.component';
+
 
 
 
@@ -27,7 +37,14 @@ import { StarComponent } from './components/feedback/star/star.component';
   declarations: [
     AppComponent,
     FeedbackComponent,
-    StarComponent
+    StarComponent,
+    DialogComponent,
+    HostDirective,
+    TestComponent,
+    OverlayComponent,
+    SurveyContainerDirective,
+    GoodComponent,
+    BadComponent
   ],
   imports: [
     ...MAT_MODULES,
@@ -38,8 +55,16 @@ import { StarComponent } from './components/feedback/star/star.component';
     FormsModule,
     ReactiveFormsModule
   ],
+  entryComponents: [
+  	TestComponent,
+  	OverlayComponent,
+    BadComponent,
+    GoodComponent
+  ],
   providers: [
-  	ConstantsProvider
+  	ConstantsProvider,
+  	UserService,
+    TestService
   ],
   bootstrap: [AppComponent]
 })

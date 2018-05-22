@@ -1,7 +1,15 @@
-<section fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0">
-  <bd-star *ngFor="let iteration of stars; index as rating" 
-  	[rating]="rating+1" 
-  	[selected]="isRatingSelected(rating+1)" 
-  	(onHighlight)="highlightRating($event)" 
-  	(onSelect)="registerRating($event)" [size]="size"></bd-star>
+<section fxLayout="column" fxLayoutAlign="center center">
+  <h2 *ngIf="selectedRating">{{selectedRating}}</h2>
+  <section fxLayout="row" [fxLayoutAlign]="alignment.rating">
+    <section fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0">
+	  <bd-star *ngFor="let iteration of stars; index as rating" 
+  	  [rating]="rating+1" 
+  	  [selected]="isRatingSelected(rating+1)" 
+  	  (onHighlight)="highlightRating($event)" 
+  	  (onSelect)="registerRating($event)" [size]="size"></bd-star>
+    </section>  	
+  </section>		
+</section>
+<section>
+  <ng-template surveyContainer></ng-template>
 </section>

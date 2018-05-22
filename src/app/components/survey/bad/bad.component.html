@@ -1,0 +1,8 @@
+<section fxLayout="column" fxLayoutAlign="center center" style="margin: 1rem;">
+  <ul fxLayout="row" class="reason-list" fxLayoutGap="1rem" style="margin-top: 1rem">
+  	<li *ngFor="let i of [1,2,3,4,5]" class="reason" fxLayout="row" fxLayoutAlign="center center" (click)="submit(i)">
+  	  Reason {{i}}
+  	</li>
+  </ul>
+<h2>{{reason}}</h2>
+</section>

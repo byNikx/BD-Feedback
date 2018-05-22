@@ -3,16 +3,10 @@
     <mat-card>
       <mat-card-content fxLayout="column" fxLayoutGap="2rem" fxLayoutAlign="center center">
         <bd-feedback 
-          [max]="count" 
-          [size]="size" 
-          (onSelect)="saveRating($event)"></bd-feedback>
-          <mat-divider></mat-divider>
-          <section>
-            <mat-radio-group [(ngModel)]="size">
-            <mat-radio-button *ngFor="let size of ['small', 'medium', 'large', 'xl']" [value]="size">{{size}}</mat-radio-button>
-          </mat-radio-group>
-          </section>
-          <input type="number" [(ngModel)]="count">{{count}}
+          [max]="5" 
+          size="xl" 
+          (onSelect)="saveRating($event)"
+          [config]="ratingConfig"></bd-feedback>
       </mat-card-content>
     </mat-card>
   </section>
