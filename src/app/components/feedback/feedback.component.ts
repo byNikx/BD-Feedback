@@ -7,7 +7,10 @@ import {
   ViewChild,
   ComponentFactoryResolver,
   ComponentRef,
-  Inject } from '@angular/core';
+  Inject,
+  AfterViewInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { SurveyContainerDirective } from './survey-container.directive';
 import { TestComponent } from '../test/test.component';
 import { APP_CONSTANT } from '../../app.constants';
@@ -39,6 +42,76 @@ export class FeedbackComponent implements OnInit {
   private _surveyComponent: LoadedComponent<any>;
   private survey: any;
   private _alignment: any = {};
+  private _onSelect: BehaviorSubject<number>;
+  private _onPoor: BehaviorSubject<number>;
+  private _onGood: BehaviorSubject<number>;
+
+  /**
+   * Placeholder for dynamically loaded component 
+   * @param {SurveyContainerDirective} surveyContainer
+   */
+  @ViewChild( SurveyContainerDirective ) surveyContainer: SurveyContainerDirective;
+  
+  constructor(
+    private _componentFactoryResolver: ComponentFactoryResolver,
+    @Inject( APP_CONSTANT ) public APP_CONSTANT: any) 
+  { 
+    this._initialize();
+  }
+    
+  ngOnInit() {
+    this.stars = new Array(this.max);
+    this.alignment.rating = `${this.APP_CONSTANT.FLEX_LAYOUT_ALIGN.CENTER} ${this.APP_CONSTANT.FLEX_LAYOUT_ALIGN.CENTER}`
+//    this.onPoorRating.subscribe(rating => console.log('on poor', rating));
+  }
+
+  /**
+   * Getter for variable _onSelect
+   * @return {BehaviorSubject<number>}
+   */
+  get onSelect(): BehaviorSubject<number>{
+    return this._onSelect;
+  }
+
+  /**
+   * Setter for variable _onSelect
+   * @param {BehaviorSubject<number>} rating [description]
+   */
+  set onSelect(rating: BehaviorSubject<number>){
+    this._onSelect = rating;
+  }
+
+  /**
+   * Getter for variable _onPoor
+   * @return {BehaviorSubject<number>}
+   */
+  get onPoor(): BehaviorSubject<number>{
+    return this._onPoor;
+  }
+
+  /**
+   * Setter for variable _onPoor
+   * @param {BehaviorSubject<number>} rating [description]
+   */
+  set onPoor(rating: BehaviorSubject<number>){
+    this._onPoor = rating;
+  }
+
+  /**
+   * Getter for variable _onGood
+   * @return {BehaviorSubject<number>}
+   */
+  get onGood(): BehaviorSubject<number>{
+    return this._onGood;
+  }
+
+  /**
+   * Setter for variable _onGood
+   * @param {BehaviorSubject<number>} rating [description]
+   */
+  set onGood(rating: BehaviorSubject<number>){
+    this._onGood = rating;
+  }
 
   /**
    * Getter for variable _alignment
@@ -54,22 +127,6 @@ export class FeedbackComponent implements OnInit {
    */
   set alignment(aligment: any){
     this._alignment = aligment;
-  }
-
-  /**
-   * Placeholder for dynamically loaded component 
-   * @param {SurveyContainerDirective} surveyContainer
-   */
-  @ViewChild(SurveyContainerDirective) surveyContainer: SurveyContainerDirective;
-  
-  constructor(
-    private _componentFactoryResolver: ComponentFactoryResolver,
-    @Inject( APP_CONSTANT ) public APP_CONSTANT: any) { }
-    
-
-  ngOnInit() {
-  	this.stars = new Array(this.max);
-    this.alignment.rating = `${this.APP_CONSTANT.FLEX_LAYOUT_ALIGN.CENTER} ${this.APP_CONSTANT.FLEX_LAYOUT_ALIGN.CENTER}`
   }
 
   /**
@@ -105,7 +162,7 @@ export class FeedbackComponent implements OnInit {
    * @param {number} rating
    */
   set poorRating(rating: number){
-    this._poorRating = rating || Math.floor(this.max/2);
+    this._poorRating = rating;
   }
 
   /**
@@ -171,7 +228,7 @@ export class FeedbackComponent implements OnInit {
    * Event triggers when user selects a rating
    * @param {[type]} ) onSelect = new EventEmitter( [description]
    */
-  @Output() onSelect = new EventEmitter();
+  @Output('onSelect') onSelectEvent = new EventEmitter();
 
   /**
    * Getter for variable _selectedRating
@@ -190,8 +247,9 @@ export class FeedbackComponent implements OnInit {
     if(typeof this._onSelectCallback === 'function'){
       this._onSelectCallback(rating);
     }else{      
-      this.onSelect.emit(rating);          
+      this.onSelectEvent.emit(rating);          
     }
+    this.onSelect.next(rating);
     this._handleSurvey(rating);
   }
 
@@ -217,7 +275,7 @@ export class FeedbackComponent implements OnInit {
    * @return {boolean} status of the rating
    */
   public isRatingSelected(rating: number): boolean{
-  	return rating <= ( this.tempRating || this.selectedRating );
+    return rating <= ( this.tempRating || this.selectedRating );
   }
 
   /**
@@ -225,7 +283,7 @@ export class FeedbackComponent implements OnInit {
    * @param {number} rating - value of rating on which mouse pointer is currently on
    */
   public highlightRating(rating: number): void{
-  	this.tempRating = rating;
+    this.tempRating = rating;
   }
 
   /**
@@ -248,7 +306,8 @@ export class FeedbackComponent implements OnInit {
     const isGoodRating = rating === this.max;
     const loadedSurvey = this.surveyComponent;
 
-    if(isPoorRating){       
+    if(isPoorRating){
+      this.onPoor.next(rating);       
       if(this.survey.onBad){
         if(this.surveyComponent){
           if(!(this.surveyComponent.component === this.survey.onBad)){
@@ -260,6 +319,7 @@ export class FeedbackComponent implements OnInit {
       }
       this._onPoorRatingCallback(rating);
     }else if(isGoodRating){
+      this.onGood.next(rating);
       if(this.survey.onGood){
         if(this.surveyComponent){
           if(!(this.surveyComponent.component === this.survey.onGood)){
@@ -319,6 +379,14 @@ export class FeedbackComponent implements OnInit {
    */
   private _onGoodRatingCallback(rating: number){
 //  console.log("on good rating callback local", rating);
+  }
+
+  private _initialize(){
+    this.onPoor = new BehaviorSubject(0);
+    this.onGood = new BehaviorSubject(0);
+    this.onSelect = new BehaviorSubject(0);
+    this.max = 5;
+    this.poorRating = Math.floor(this.max/2);
   }
 
 }
